@@ -1,15 +1,28 @@
 const express=require('express');
 const db = require('./db');
 
+const Person=require('./models/Person');
+const menuItem=require('./models/Menu');
+
+const bodyParser =require('body-parser');
+
 const app=express();
 
-app.get('/',function(req,res){
-    res.send('endpoint0');
-});
+app.use(bodyParser.json());
 
-app.post('/harsh',function(req,res){
-    res.send('endpoint1');
-})
+
+// Import the routers
+
+const personRoutes = require('./routes/personRoutes');
+const menuRoutes = require('./routes/menuRoutes');
+
+// Use the router
+
+app.use('/Person',personRoutes);
+app.use('/menu',menuRoutes);
+
+
+
 
 
 
