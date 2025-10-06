@@ -4,6 +4,8 @@ const db = require('./db');
 const Person=require('./models/Person');
 const menuItem=require('./models/Menu');
 
+require('dotenv').config();
+
 const bodyParser =require('body-parser');
 
 const app=express();
@@ -24,9 +26,9 @@ app.use('/menu',menuRoutes);
 
 
 
+const PORT=process.env.PORT || 3000;
 
 
-let PORT=3000;
 app.listen(PORT,()=>{
     console.log(`Server is listening on port ${PORT}`);
 });
