@@ -13,31 +13,43 @@ router.post('/',async (req,res)=>{
     newPerson.name=data.name;
     newPerson.age=data.age;
     newPerson.work=data.work;
+    newPerson.userName=data.userName;
+    newPerson.passWord=data.passWord;
 
     // Save the data to database
 // Save the data to database
 try {
     const savedPerson = await newPerson.save();
     console.log("Data saved successfully");
-    res.status(100).json(savedPerson);
+    res.status(200).json(savedPerson);
 } catch (err) {
     console.log("Error saving person:", err);
     res.status(500).json({ error: "Internal Server Error" });
 }}
 );
+router.get('/', async (req, res) => {
+  try {
+    const { userName, passWord } = req.query;
 
-router.get('/',async (req,res)=>{
-    
-    try {
-        const data =await Person.find();
-        console.log('Data Fetched');
-        res.status(200).json(data);
+    if (userName && passWord) {
+      // If credentials are given, find matching person
+      const person = await Person.findOne({ userName, passWord });
+      if (!person) {
+        return res.status(404).json({ error: "User not found or incorrect password" });
+      }
+      console.log("Single person fetched by credentials");
+      return res.status(200).json(person);
     }
-    catch(err){
-        console.log("Error getting person:", err);
+
+    // Otherwise, fetch all persons
+    const data = await Person.find();
+    console.log('All persons fetched');
+    res.status(200).json(data);
+  } catch (err) {
+    console.log("Error getting person:", err);
     res.status(500).json({ error: "Internal Server Error" });
-    }
-})
+  }
+});
 
 
 
